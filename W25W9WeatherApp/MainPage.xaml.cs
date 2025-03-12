@@ -1,25 +1,38 @@
-﻿namespace W25W9WeatherApp
+﻿using System.Threading.Tasks;
+
+namespace W25W9WeatherApp
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
         public MainPage()
         {
             InitializeComponent();
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+                stack.Background = Brush.MediumPurple;
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        private async void OnGetWeatherBtnClicked(object sender, EventArgs e)
         {
-            count++;
+            // read the device's location
+            var location = await Geolocation.Default.GetLocationAsync();
+            var lat = location.Latitude;
+            var lon = location.Longitude;
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
+            // request url
+            string url = $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid=adee4d9d26685357054efd2f06359807";
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
+            // make the api call
+            var myWeather = await WeatherProxy.GetWeatherAsync(url);
+
+            // display the result
+            CityLbl.Text = myWeather.name;
+            TemperatureLbl.Text = myWeather.main.temp.ToString("F0") + "\u00B0C";
+            ConditionsLbl.Text = myWeather.weather[0].description;
+
+            // display image
+            string iconUrl = $"https://openweathermap.org/img/wn/{myWeather.weather[0].icon}@2x.png";
+            WeatherImg.Source = ImageSource.FromUri(new Uri(iconUrl));
         }
     }
-
 }

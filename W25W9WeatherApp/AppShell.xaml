@@ -5,10 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:W25W9WeatherApp"
     Shell.FlyoutBehavior="Disabled"
-    Title="W25W9WeatherApp">
+    Title="My Weather App">
 
     <ShellContent
-        Title="Home"
+        Title="My Weather App"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 

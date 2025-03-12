@@ -9,7 +9,7 @@ namespace W25W9WeatherApp
 {
     public class WeatherProxy
     {
-        public async Task<Root> GetWeatherAsync(string url)
+        public static async Task<Root> GetWeatherAsync(string url)
         {
             HttpClient client = new HttpClient();
             var response = await client.GetStringAsync(url);
